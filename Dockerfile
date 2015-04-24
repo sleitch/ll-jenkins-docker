@@ -1,8 +1,18 @@
 FROM java:openjdk-7u65-jdk
-FROM node:0.12-onbuild
+###FROM node:0.12-onbuild
+
 
 RUN apt-get update && apt-get install -y wget git curl zip && rm -rf /var/lib/apt/lists/*
 
+#
+# Custom sleitch...
+#
+RUN apt-get install -y nodejs
+RUN apt-get install -y build-essential
+
+#
+# -- end custom --
+#
 ENV JENKINS_HOME /var/jenkins_home
 
 # Jenkins is ran with user `jenkins`, uid = 1000
