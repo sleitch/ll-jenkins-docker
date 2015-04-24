@@ -1,4 +1,5 @@
 FROM java:openjdk-7u65-jdk
+FROM node:0.12-onbuild
 
 RUN apt-get update && apt-get install -y wget git curl zip && rm -rf /var/lib/apt/lists/*
 
