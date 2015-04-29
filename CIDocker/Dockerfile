@@ -71,10 +71,9 @@ EXPOSE 8080
 # will be used by attached slave agents:
 EXPOSE 50000
 
-COPY jenkins.sh /usr/local/bin/jenkins.sh
-
 USER jenkins
 
+COPY jenkins.sh /usr/local/bin/jenkins.sh
 ENTRYPOINT ["/usr/local/bin/jenkins.sh"]
 
 # from a derived Dockerfile, can use `RUN plugin.sh active.txt` to setup /usr/share/jenkins/ref/plugins from a support bundle
