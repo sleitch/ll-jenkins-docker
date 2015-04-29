@@ -7,8 +7,8 @@
 ##
 ###
 #########################################################################################
-
-FROM       ubuntu:latest
+FROM java:oracle-java8
+#FROM       ubuntu:latest
 MAINTAINER S. Leitch sleitch@credera.com
 
 
