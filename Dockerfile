@@ -43,7 +43,15 @@ ENV JENKINS_UC https://updates.jenkins-ci.org
 RUN chown -R jenkins "$JENKINS_HOME" /usr/share/jenkins/ref
 
 # for main web interface:
-EXPOSE 8080
+#EXPOSE 8080
+#
+#  STU: todo - changed to SSL
+
+COPY https.pem /var/lib/jenkins/cert
+COPY https.key /var/lib/jenkins/pk
+ENV JENKINS_OPTS --httpPort=-1 --httpsPort=8083 --httpsCertificate=/var/lib/jenkins/cert --httpsPrivateKey=/var/lib/jenkins/pk
+EXPOSE 8083
+
 
 # will be used by attached slave agents:
 EXPOSE 50000
