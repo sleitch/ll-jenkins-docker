@@ -1,4 +1,4 @@
-URL=http://172.24.200.10:4243/images/quay.io/leisurelink/authentic-api/push
+URL=http://172.24.200.10:4243/containers/8f3578ee8ddc/exec
 
 
 DATA="{\"AttachStdin\": false, \"AttachStdout\": true, \"AttachStderr\": true,\"Tty\": false, \"Cmd\": [ \"date\" ]}"
