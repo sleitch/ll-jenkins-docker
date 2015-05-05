@@ -17,7 +17,7 @@ echo "Exec URL:  " $URL
 echo "Exec data: " $DATA
 
 
- curl -H 'Content-Type:application/json' -X POST $URL --data "$DATA" -vv
+ curl -H 'Content-Type:application/json' -X POST $URL --data "$DATA" -v
 
  ## WORKS
  #
