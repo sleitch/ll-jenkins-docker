@@ -8,7 +8,7 @@ CONTAINER=test_sshd
 #
 #  The data for the command:
 #
-DATA='{"AttachStdin": false, "AttachStdout": true, "AttachStderr": true,"Tty": false, "Cmd": [ "date" ]}'
+DATA='{"AttachStdin": false, "AttachStdout": true, "AttachStderr": true,"Tty": false, "Cmd": [ "hello.sh" ]}'
 
 
 URL='http://172.24.200.10:4243/containers/'"$CONTAINER"'/exec'
