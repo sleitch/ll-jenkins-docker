@@ -17,4 +17,4 @@ DATA="{\"AttachStdin\": false, \"AttachStdout\": true, \"AttachStderr\": true,\"
     }
     
     
- curl -vv -X POST 'http://172.24.200.10:4243/containers/8f3578ee8ddc/exec -d 
+ curl -vv -X POST $URL -d $DATA
