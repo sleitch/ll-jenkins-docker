@@ -10,10 +10,9 @@ echo "Pushing..."
 
 DATA="{\"AttachStdin\": false, \"AttachStdout\": true, \"AttachStderr\": true,\"Tty\": false, \"Cmd\": [ \"date\" ]}"
 
-URL=containers/e90e34656806/exec
 
 
-curl -vv -X POST -H  $URL -d $DATA
+curl -vv -X POST $URL -d $DATA
 
 
 #
