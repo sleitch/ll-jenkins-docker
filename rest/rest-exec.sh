@@ -1,20 +1,25 @@
 #!/bin/bash
 
-URL=http://172.24.200.10:4243/containers/8f3578ee8ddc/exec
+#
+# The name (or ID) of the container to execute on
+#
+CONTAINER=test_sshd
 
-echo "Exec..."
-
+#
+#  The data for the command:
+#
 DATA='{"AttachStdin": false, "AttachStdout": true, "AttachStderr": true,"Tty": false, "Cmd": [ "date" ]}'
 
 
+URL='http://172.24.200.10:4243/containers/'"$CONTAINER"'/exec'
 
-#
-#   test_sshd = 8f3578ee8ddc
+echo "Exec URL:  " $URL
+echo "Exec data: " $DATA
 
 
- curl -H 'Content-Type:application/json' -X POST $URL --data $DATA -vv
- 
+ curl -H 'Content-Type:application/json' -X POST $URL --data "$DATA" -vv
+
  ## WORKS
  #
  #curl -H 'Content-Type:application/json' -X POST 'http://172.24.200.10:4243/containers/8f3578ee8ddc/exec' --data '{"AttachStdin": false, "AttachStdout": true, "AttachStderr": true,"Tty": false, "Cmd": [ "date" ]}' -vv
- 
+
