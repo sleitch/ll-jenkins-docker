@@ -11,8 +11,7 @@ echo "Pushing..."
 DATA="{\"AttachStdin\": false, \"AttachStdout\": true, \"AttachStderr\": true,\"Tty\": false, \"Cmd\": [ \"date\" ]}"
 
 
-
-curl -vv -X POST $URL -d $DATA
+curl -X POST -H "application/json" -d $DATA $URL
 
 
 #
