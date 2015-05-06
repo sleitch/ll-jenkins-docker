@@ -10,12 +10,13 @@ RUN useradd  -u 1005 -m -s /bin/bash manager
 
 ENV MANAGER_HOME /home/manager
 
-
 COPY devops.tar.gz "$MANAGER_HOME"/devops.tar.gz
 COPY provision.tar.gz "$MANAGER_HOME"/provision.tar.gz
 
 
-RUN tar -zxvf  devops.tar.gz -C "$MANAGER_HOME" / && utar -zxvf  provision.tar.gz -C "$MANAGER_HOME"/
+RUN chown -R manager "$MANAGER_HOME"
+
+RUN tar -zxvf  "$MANAGER_HOME"/devops.tar.gz / && utar -zxvf "$MANAGER_HOME"/provision.tar.gz
     
     
 USER manager
