@@ -32,20 +32,16 @@ echo "substring: " ${RES:7:$STRLEN}
 #echo "CURRENT_EXEC_ID: " $CURRENT_EXEC_ID
 #export CURRENT_EXEC_ID
 
-echo "Arg 1 (is exec ID):  " $1
 
 #
 #  The data for the command:
 #
 DATA='{"Detach": false, "Tty": false}'
 
-
 URL='http://172.24.200.10:4243/exec/'"$CURRENT_EXEC_ID"'/start'
-
 
 echo "Exec URL:  " $URL
 echo "Exec data: " $DATA
-
 
  STARTRES=$(curl -H 'Content-Type:application/json' -X POST $URL --data "$DATA" -v)
  
