@@ -8,7 +8,7 @@ CONTAINER=test_sshd
 #
 #  The data for the command:
 #
-DATA='{"AttachStdin": false, "AttachStdout": true, "AttachStderr": true,"Tty": false, "Cmd": [ "hello.sh" ],"testargs":"value"}'
+DATA='{"AttachStdin": false, "AttachStdout": true, "AttachStderr": true,"Tty": false, "Cmd": [ "hello.sh","testme" ],"test":"test"}'
 
 
 URL='http://172.24.200.10:4243/containers/'"$CONTAINER"'/exec'
@@ -17,9 +17,17 @@ echo "Exec URL:  " $URL
 echo "Exec data: " $DATA
 
 
- curl -H 'Content-Type:application/json' -X POST $URL --data "$DATA" -v
+RES=$(curl -H 'Content-Type:application/json' -X POST $URL --data "$DATA")
 
- ## WORKS
- #
- #curl -H 'Content-Type:application/json' -X POST 'http://172.24.200.10:4243/containers/8f3578ee8ddc/exec' --data '{"AttachStdin": false, "AttachStdout": true, "AttachStderr": true,"Tty": false, "Cmd": [ "date" ]}' -vv
+echo "Result=" $RES
 
+LEN=${#RES} 
+
+ ## Subtract the leading/trailing 9 chars - forthese guys:  {"Id":""}
+
+STRLEN=$(( $LEN - 9))
+
+CURRENT_EXEC_ID=${RES:7:$STRLEN}
+echo "substring: " ${RES:7:$STRLEN}
+echo "CURRENT_EXEC_ID: " $CURRENT_EXEC_ID
+export CURRENT_EXEC_ID
