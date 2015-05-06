@@ -18,4 +18,3 @@ RUN tar -zxvf  devops.tar.gz -C "$MANAGER_HOME" / && utar -zxvf  provision.tar.g
     
 USER manager
 
-CMD ["/usr/sbin/sshd", "-D"]
