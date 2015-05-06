@@ -10,18 +10,22 @@ RUN useradd  -u 1005 -m -s /bin/bash manager
 
 ENV MANAGER_HOME /home/manager
 
-#ADD /tar/apache-tomcat-7.0.47.tar.gz /tmp
-#RUN ls /tmp
 
-COPY devops.tar.gz "$MANAGER_HOME"/devops.tar.gz
-COPY provision.tar.gz "$MANAGER_HOME"/provision.tar.gz
-RUN ls "$MANAGER_HOME"
+ADD devops.tar.gz "$MANAGER_HOME"
+ADD provision.tar.gz :$MANAGER_HOME"
 
 
-RUN chown -R manager "$MANAGER_HOME"
+COPY devops.tar.gz /home/manager/devops.tar.gz
+COPY provision.tar.gz /home/manager/provision.tar.gz
+RUN echo "$MANAGER_HOME"
+RUN echo ls "$MANAGER_HOME"
 
-RUN tar -zxvf  "$MANAGER_HOME"/devops.tar.gz / && utar -zxvf "$MANAGER_HOME"/provision.tar.gz
+
+RUN tar -zxvf /home/manager/devops.tar.gz -C "$MANGER_HOME"/ && tar -zxvf $MANAGER_HOME/provision.tar.gz -C "$MANGER_HOME"/
+
+RUN chown -R manager $MANAGER_HOME
+
+USER manager    
     
-    
-USER manager
+
 
