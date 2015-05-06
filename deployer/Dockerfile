@@ -27,6 +27,6 @@ RUN chown -R manager $MANAGER_HOME
 
 USER manager 
 
-CMD ["bash"]    
+CMD [ "/bin/sh"]    
 
 
