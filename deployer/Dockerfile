@@ -1,6 +1,8 @@
 FROM ansible/centos7-ansible:stable
 
-RUN yum -y install tar
+RUN yum -y update; yum clean all
+RUN yum -y install tar openssh-server passwd; yum clean all
+
 
 #
 # Add manager user (I choose 1005 as the manager on host uses that)
@@ -25,8 +27,20 @@ RUN tar -zxvf /home/manager/devops.tar.gz -C "$MANGER_HOME"/ && tar -zxvf $MANAG
 
 RUN chown -R manager $MANAGER_HOME
 
+
+
 USER manager 
 
-CMD [ "/bin/sh","-D"]    
+ADD ./start.sh /start.sh
+RUN mkdir /var/run/sshd
+
+RUN ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key -N '' 
+
+RUN chmod 755 /start.sh
+# EXPOSE 22
+RUN ./start.sh
+ENTRYPOINT ["/usr/sbin/sshd", "-D"]
+
+
 
 
