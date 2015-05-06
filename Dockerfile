@@ -51,8 +51,10 @@ COPY certs/cacert.pem /var/lib/jenkins/cert
 COPY certs/privkey.pem /var/lib/jenkins/pk
 
 ENV JENKINS_OPTS --httpPort=-1 --httpsPort=8083 --httpsCertificate=/var/lib/jenkins/cert --httpsPrivateKey=/var/lib/jenkins/pk
-EXPOSE 8083
+ENV JAVA_ARGS="-Dmail.smtp.starttls.enable=true"
+ENV JENKINS_JAVA_OPTIONS="-Dmail.smtp.starttls.enable=true"  
 
+EXPOSE 8083
 
 # will be used by attached slave agents:
 EXPOSE 50000
