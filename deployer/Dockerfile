@@ -25,7 +25,8 @@ RUN tar -zxvf /home/manager/devops.tar.gz -C "$MANGER_HOME"/ && tar -zxvf $MANAG
 
 RUN chown -R manager $MANAGER_HOME
 
-USER manager    
-    
+USER manager 
+
+CMD ["bash"]    
 
 
