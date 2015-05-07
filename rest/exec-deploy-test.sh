@@ -8,7 +8,7 @@ CONTAINER=deploy-manager
 #
 #  The data for the command:
 #
-DATA='{"AttachStdin": false, "AttachStdout": true, "AttachStderr": true,"Tty": false, "Cmd": [ "hello.sh","testargs" ]}'
+DATA='{"AttachStdin": false, "AttachStdout": true, "AttachStderr": true,"Tty": false, "Cmd": [ "deploytest.sh","'$1'" ]}'
 
 
 URL='http://172.24.200.10:4243/containers/'"$CONTAINER"'/exec'
