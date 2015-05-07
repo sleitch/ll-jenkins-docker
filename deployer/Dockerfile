@@ -7,14 +7,14 @@ RUN yum -y install tar openssh-server passwd; yum clean all
 #
 # Add manager user (I choose 1005 as the manager on host uses that)
 #
-RUN useradd  -u 1005 -m -s /bin/bash manager
+RUN useradd  -G manager -u 1005 -m -s /bin/bash manager
 
 
 ENV MANAGER_HOME /home/manager
 
 
-ADD devops.tar.gz /home/manager/
-ADD provision.tar.gz "$MANAGER_HOME"
+ADD devops.tar.gz  $MANAGER_HOME 
+ADD provision.tar.gz /home/manager/E
 
 
 #COPY devops.tar.gz /home/manager/devops.tar.gz
@@ -28,21 +28,18 @@ ADD provision.tar.gz "$MANAGER_HOME"
 RUN chown -R manager $MANAGER_HOME
 
 
+EUN  /etc/init.d/sshd start
 
+RUN echo 'manager:secret' | chpasswd
+RUN echo '%manager ALL=(ALL) ALL' >> /etc/sudoers
 
-ADD ./start.sh /start.sh
-RUN mkdir /var/run/sshd
+RUN mkdir -p /home/manager/.ssh
+ADD authorized_keys /home/manager/.ssh/
+RUN chown -R manager:manager /home/manager/.ssh; chmod 700 /home/manager/.ssh
 
-RUN ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key -N '' 
+EXPOSE 22
 
-RUN chmod 755 /start.sh
-# EXPOSE 22
-RUN ./start.sh
+CMD    ["/usr/sbin/sshd", "-D"]
 
 USER manager 
-
-ENTRYPOINT ["/usr/sbin/sshd", "-D"]
-
-
-
 
