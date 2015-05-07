@@ -29,7 +29,7 @@ ADD provision.tar.gz /home/manager/E
 RUN chown -R manager $MANAGER_HOME
 
 
-EUN  /etc/init.d/sshd start
+RUN  /etc/init.d/sshd start
 
 RUN echo 'manager:secret' | chpasswd
 RUN echo '%manager ALL=(ALL) ALL' >> /etc/sudoers
