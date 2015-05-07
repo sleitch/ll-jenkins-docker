@@ -25,6 +25,10 @@ ADD devops.tar.gz  $MANAGER_HOME
 ADD provision.tar.gz $MANAGER_HOME
 
 
+#RUN  -zxvf /home/manager/devops.tar.gz -C "$MANGER_HOME"/ && tar -zxvf $MANAGER_HOME/provision.tar.gz -C "$MANGER_HOME"/
+
+RUN  tar -xvf $MANAGER_HOME/provision/dev/dev-manager.tar && $MANAGER_HOME/provision/dev/create-manager.sh
+
 RUN chown -R manager $MANAGER_HOME
 
 #USER manager 

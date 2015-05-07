@@ -3,7 +3,7 @@
 #
 # The name (or ID) of the container to execute on
 #
-CONTAINER=test_sshd
+CONTAINER=deploy-manager
 
 #
 #  The data for the command:
