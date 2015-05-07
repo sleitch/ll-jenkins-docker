@@ -15,7 +15,7 @@ ENV MANAGER_HOME /home/manager
 
 
 ADD devops.tar.gz  $MANAGER_HOME 
-ADD provision.tar.gz /home/manager/E
+ADD provision.tar.gz $MANAGER_HOME
 
 
 #COPY devops.tar.gz /home/manager/devops.tar.gz
