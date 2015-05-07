@@ -1,6 +1,24 @@
 FROM ansible/ubuntu14.04-ansible:stable
 MAINTAINER Stuart Leitch <sleitch@credera.com>
 
+#
+# Add manager user (I choose 1005 as the manager on host uses that)
+#
+RUN groupadd manager
+RUN useradd -g manager -u 1005 -m -s /bin/bash manager
+
+ENV MANAGER_HOME /home/manager
+
+ADD devops.tar.gz  $MANAGER_HOME 
+ADD provision.tar.gz $MANAGER_HOME
+
+#RUN tar -zxvf /home/manager/devops.tar.gz -C "$MANGER_HOME"/ && tar -zxvf $MANAGER_HOME/provision.tar.gz -C "$MANGER_HOME"/
+
+RUN chown -R manager $MANAGER_HOME
+
+#USER manager 
+
+
 RUN apt-get update && apt-get install -y openssh-server
 RUN mkdir /var/run/sshd
 RUN echo 'root:testing' | chpasswd
