@@ -8,7 +8,7 @@ RUN yum -y install tar openssh-server passwd; yum clean all
 # Add manager user (I choose 1005 as the manager on host uses that)
 #
 RUN groupadd manager
-RUN useradd  -G manager -u 1005 -m -s /bin/bash manager
+RUN useradd -g manager -u 1005 -m -s /bin/bash manager
 
 
 ENV MANAGER_HOME /home/manager
