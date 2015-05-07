@@ -38,7 +38,7 @@ RUN chown -R manager $MANAGER_HOME
 #EXPOSE 22
 #CMD    ["/usr/sbin/sshd", "-D"]
 
-USER manager 
+#USER manager 
 
 
 RUN mkdir /var/run/sshd
