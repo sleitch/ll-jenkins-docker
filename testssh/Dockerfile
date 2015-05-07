@@ -3,7 +3,7 @@ MAINTAINER Stuart Leitch <sleitch@credera.com>
 
 RUN apt-get update && apt-get install -y openssh-server
 RUN mkdir /var/run/sshd
-RUN echo 'root:screencast' | chpasswd
+RUN echo 'root:testing' | chpasswd
 RUN sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 
 # SSH login fix. Otherwise user is kicked off after login
