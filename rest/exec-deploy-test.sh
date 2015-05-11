@@ -1,5 +1,26 @@
 #!/bin/bash
 
+#
+# Define the execute start exec function for later use.
+#
+# This will execute the start command against the exec ID
+#
+function startExec{ 
+    #  The data for the command:
+    #
+    data='{"Detach": false, "Tty": false}'
+
+    URL='http://172.24.200.10:4243/exec/'"$CURRENT_EXEC_ID"'/start'
+
+    echo "Exec URL:  " $URL
+    echo "Exec data: " $data
+
+    STARTRES=$(curl -H 'Content-Type:application/json' -X POST $URL --data "$data" -v)
+ 
+    echo "Result of start exec: " $STARTRES
+   
+}  
+
 # The name (or ID) of the container to execute on
 #
 CONTAINER=deploy-manager
@@ -70,21 +91,7 @@ fi
 
  
  
- function startExec{ 
-    #  The data for the command:
-    #
-    data='{"Detach": false, "Tty": false}'
-
-    URL='http://172.24.200.10:4243/exec/'"$CURRENT_EXEC_ID"'/start'
-
-    echo "Exec URL:  " $URL
-    echo "Exec data: " $data
-
-    STARTRES=$(curl -H 'Content-Type:application/json' -X POST $URL --data "$data" -v)
  
-    echo "Result of start exec: " $STARTRES
-   
-}  
                 
 
 
