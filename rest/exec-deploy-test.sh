@@ -15,10 +15,32 @@ function startExec{
     echo "Exec URL:  " $URL
     echo "Exec data: " $data
 
-    STARTRES=$(curl -H 'Content-Type:application/json' -X POST $URL --data "$data" -v)
+    STARTRES=$( curl -qSfsw '\n%{http_code}'  -H 'Content-Type:application/json' -X POST $URL --data "$data") 2>/dev/null
+    # get exit code of curl
+    STARTRET=$?
+    
+    #STARTRES=$(curl -H 'Content-Type:application/json' -X POST $URL --data "$data" -v)
  
     echo "Result of start exec: " $STARTRES
    
+   
+   
+   if [[ $STARTRET -ne 0 ]] ; then
+        echo "Curl Error, exit code: $STARTRET"
+    else
+        #
+        # This will split the result msg and code into array
+        readarray -t startbody <<<"$STARTRET"
+        
+          echo "startbody= "  ${startbody}
+                 
+        echo "startbody 0 = "  ${startbody[0]}
+       echo "startbody 1 = "  ${startbody[1]}
+        
+       # httpcode=${resultbody[2]}
+    
+      
+    fi
 }  
 
 # The name (or ID) of the container to execute on
@@ -44,7 +66,6 @@ echo "Out= " $OUT
 #echo "Curl exit code: " $RET
 
 if [[ $RET -ne 0 ]] ; then
-    # Error exit code from curl
     echo "Curl Error, exit code: $RET"
 else
     #
@@ -53,7 +74,6 @@ else
     httpcode=${resultbody[2]}
 
     echo "Curl Success, HTTP status is: " $httpcode
-
     echo "Response is: " ${resultbody[0]}
  
     if [[ $httpcode -eq 404 ]] ; then
@@ -83,7 +103,7 @@ else
 			echo "Start EXEC ID: " $CURRENT_EXEC_ID
 			
 			
-			startExec();
+			startExec
         fi
     fi
 fi
