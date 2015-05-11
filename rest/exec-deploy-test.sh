@@ -11,22 +11,16 @@ data='{"AttachStdin": false, "AttachStdout": true, "AttachStderr": true,"Tty": f
 
 URL='http://172.24.200.10:4243/containers/'"$CONTAINER"'/exec'
 
-echo "1. Exec URL:  " $URL
-echo "2. Exec data: " $data
-
-
 # get response and HTTP status code 
 OUT=$( curl -qSfsw '\n%{http_code}'  -H 'Content-Type:application/json' -X POST $URL --data "$data") 2>/dev/null
 
-# get exit code
+# get exit code of curl
 RET=$?
 
-echo "3. Out= " $OUT
-echo "4. Curl exit code: " $RET
-
-
-
-
+echo "Exec URL:  " $URL
+echo "Exec data: " $data
+echo "Out= " $OUT
+#echo "Curl exit code: " $RET
 
 if [[ $RET -ne 0 ]] ; then
     # Error exit code from curl
@@ -41,8 +35,7 @@ else
 
     echo "Curl Success, HTTP status is: " $httpcode
 
-    # and print all but the last line, i.e. the regular response
-    echo "9b.2  Response is: " $testresp 
+    echo "Response is: " ${resultbody[0]
  
     if [[ $httpcode -eq 404 ]] ; then
        # 404 no such container
@@ -64,15 +57,11 @@ else
 			
 			CURRENT_EXEC_ID=${resultbody[0]:7:$STRLEN}
 			
-			
-			echo "5. resultbody =" ${resultbody[0]}
-			echo "6. httpcode=" $httpcode
-			echo "7. Len of out =  $LEN"
-			echo "8. Start EXEC ID: " $CURRENT_EXEC_ID
-	
-           echo "Success, HTTP status is: $httpcode"
-
-           echo "Response is: ${resultbody[0]}" 
+			echo "Successful HTTP status is: $httpcode"		
+			#echo "resultbody =" ${resultbody[0]}
+			#echo "httpcode=" $httpcode
+			#echo "Len of out =  $LEN"
+			echo "Start EXEC ID: " $CURRENT_EXEC_ID
         fi
     fi
 fi
