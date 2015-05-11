@@ -26,16 +26,14 @@ if [[ $RET -ne 0 ]] ; then
     # Error exit code from curl
     echo "Curl Error, exit code: $RET"
 else
-
-
-	#
-	# This will split the result msg and code into array
-	readarray -t resultbody <<<"$OUT"
-	httpcode=${resultbody[2]}
+    #
+    # This will split the result msg and code into array
+    readarray -t resultbody <<<"$OUT"
+    httpcode=${resultbody[2]}
 
     echo "Curl Success, HTTP status is: " $httpcode
 
-    echo "Response is: " ${resultbody[0]
+    echo "Response is: " ${resultbody[0]}
  
     if [[ $httpcode -eq 404 ]] ; then
        # 404 no such container
@@ -48,8 +46,8 @@ else
         else
            #
            # Was ok...
-    
-		    LEN=${#resultbody} 
+
+           LEN=${#resultbody} 
 			
 			## Subtract the leading/trailing 9 chars - forthese guys:  {"Id":""}
 			
@@ -62,23 +60,31 @@ else
 			#echo "httpcode=" $httpcode
 			#echo "Len of out =  $LEN"
 			echo "Start EXEC ID: " $CURRENT_EXEC_ID
+			
+			
+			startExec();
         fi
     fi
 fi
  
-#  The data for the command:
-#
-data='{"Detach": false, "Tty": false}'
 
-URL='http://172.24.200.10:4243/exec/'"$CURRENT_EXEC_ID"'/start'
-
-echo "Exec URL:  " $URL
-echo "Exec data: " $data
-
-STARTRES=$(curl -H 'Content-Type:application/json' -X POST $URL --data "$data" -v)
- 
-echo "Result of start exec: " $STARTRES
  
  
+ function startExec{ 
+    #  The data for the command:
+    #
+    data='{"Detach": false, "Tty": false}'
+
+    URL='http://172.24.200.10:4243/exec/'"$CURRENT_EXEC_ID"'/start'
+
+    echo "Exec URL:  " $URL
+    echo "Exec data: " $data
+
+    STARTRES=$(curl -H 'Content-Type:application/json' -X POST $URL --data "$data" -v)
+ 
+    echo "Result of start exec: " $STARTRES
+   
+}  
+                
 
 
