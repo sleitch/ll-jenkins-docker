@@ -15,7 +15,7 @@ echo "1. Exec URL:  " $URL
 echo "2. Exec data: " $data
 
 
-# get output, append HTTP status code in separate line, discard error message
+# get response and HTTP status code 
 OUT=$( curl -qSfsw '\n%{http_code}'  -H 'Content-Type:application/json' -X POST $URL --data "$data") 2>/dev/null
 
 # get exit code
@@ -25,59 +25,51 @@ echo "3. Out= " $OUT
 echo "4. Curl exit code: " $RET
 
 
-#
-# This will split the result msg and code into array
-readarray -t resultbody <<<"$OUT"
-httpcode=${resultbody[2]}
-
-echo "5. resultbody =" ${resultbody[0]}
-
-echo "6 httpcode=" $httpcode
-
-LEN=${#resultbody} 
-
-echo "7. Len of out =  $LEN"
-
- ## Subtract the leading/trailing 9 chars - forthese guys:  {"Id":""}
-
-STRLEN=$(( $LEN - 9))
-
-CURRENT_EXEC_ID=${resultbody[0]:7:$STRLEN}
-echo "8. substring: " ${resultbody[0]:7:$STRLEN}
-#echo "CURRENT_EXEC_ID: " $CURRENT_EXEC_ID
-#export CURRENT_EXEC_ID
-
-
 
 
 
 if [[ $RET -ne 0 ]] ; then
     # Error exit code from curl
-    echo "9a.1 Error $RET"
-    echo "9a.2 HTTP Error: " $httpcode
+    echo "Curl Error, exit code: $RET"
 else
-    # otherwise print last line of output, i.e. HTTP status code
-    echo "9b.1 Curl Success, HTTP status is: " $httpcode
-    testresp=$( echo  "$OUT" | head -n-1)
+
+
+	#
+	# This will split the result msg and code into array
+	readarray -t resultbody <<<"$OUT"
+	httpcode=${resultbody[2]}
+
+    echo "Curl Success, HTTP status is: " $httpcode
 
     # and print all but the last line, i.e. the regular response
     echo "9b.2  Response is: " $testresp 
  
     if [[ $httpcode -eq 404 ]] ; then
-       # 404 – no such container
-       echo "Error: 404,  No such conatiner, conatiner is: " $CONTAINER;
+       # 404 no such container
+       echo "Error: 404,  No such container: " $CONTAINER
     else
 
         if [[ $httpcode -ne 201 ]]; then
            # if error exit code, print exit code
-           echo "Error - non 201 code:  $httpcode"
-
-           # print HTTP error
-           echo "HTTP Error: $httpcode"
+           echo "HTTP Error Code (non 201):"  $httpcode
         else
            #
            # Was ok...
     
+		    LEN=${#resultbody} 
+			
+			## Subtract the leading/trailing 9 chars - forthese guys:  {"Id":""}
+			
+			STRLEN=$(( $LEN - 9))
+			
+			CURRENT_EXEC_ID=${resultbody[0]:7:$STRLEN}
+			
+			
+			echo "5. resultbody =" ${resultbody[0]}
+			echo "6. httpcode=" $httpcode
+			echo "7. Len of out =  $LEN"
+			echo "8. Start EXEC ID: " $CURRENT_EXEC_ID
+	
            echo "Success, HTTP status is: $httpcode"
 
            echo "Response is: ${resultbody[0]}" 
