@@ -6,7 +6,8 @@
 #   This will execute the start command against the exec ID
 #
 ############################################################################
-function startExec{ 
+
+startExec(){ 
     #  The data for the command:
     #
     data='{"Detach": false, "Tty": false}'
@@ -19,23 +20,24 @@ function startExec{
     STARTRES=$( curl -qSfsw '\n%{http_code}'  -H 'Content-Type:application/json' -X POST $URL --data "$data") 2>/dev/null
     # get exit code of curl
     STARTRET=$?
-    
-    #STARTRES=$(curl -H 'Content-Type:application/json' -X POST $URL --data "$data" -v)
- 
+     
     echo "Result of start exec: " $STARTRES
       
     if [[ $STARTRET -ne 0 ]] ; then
         echo "Curl Error, exit code: $STARTRET"
+        exit $STARTRET
     else
-        #
-        # This will split the result msg and code into array
-        readarray -t startbody <<<"$STARTRET"
-        
-        echo "startbody= "  ${startbody}                 
-        echo "startbody 0 = "  ${startbody[0]}
-        echo "startbody 1 = "  ${startbody[1]}
-        
-        # httpcode=${resultbody[2]}      
+        # get the http status code from end of STARTRES 
+        startcode=$(echo "$STARTRES" | tail -n1)
+
+        echo "startcode $startcode"
+	if [[ $startcode -eq 201 ]] ; then
+           echo "No such exec ID: $CURRENT_EXEC_ID"
+        else
+           if [[ $startcode -eq 404 ]] ; then           
+              echo "No such exec ID: $CURRENT_EXEC_ID"
+           fi
+        fi 
     fi
 }  
 
@@ -46,7 +48,7 @@ function startExec{
 #   Creates the exec instance ID for later use by start command.
 #
 ############################################################################
-function createExec{ 
+createExecID(){ 
    
     CURRENT_EXEC_ID=""
    
@@ -97,6 +99,7 @@ function createExec{
                 STRLEN=$(( $LEN - 9))
                 
                 CURRENT_EXEC_ID=${resultbody[0]:7:$STRLEN}
+                export CURRENT_EXEC_ID
                 echo "Successful HTTP status is: $httpcode"     
                 echo "Start EXEC ID: " $CURRENT_EXEC_ID
             fi
@@ -119,7 +122,7 @@ CONTAINER=deploy-manager
 if [ -z "$CURRENT_EXEC_ID" ]; then
     echo "No env var called: CURRENT_EXEC_ID, creating an exec..."
     
-    createExecID;
+    createExecID $1 $2;
     echo "exec ID after create: " $CURRENT_EXEC_ID
     
     startExec
@@ -129,5 +132,19 @@ else
     echo "Found CURRENT_EXEC_ID: " $CURRENT_EXEC_ID
     
     startExec
-    
+
+    if [[ $startcode -eq 404 ]]; then
+
+        #
+        # try creating new exec ID
+        createExecID $1 $2;
+        startExec
+    fi 
+
+
+     if [[ $startcode -ne 201 ]]; then
+        echo "Failed to start exec, exit code: $startcode, Exec ID: $CURRENT_EXEC_ID"
+        exit $startcode
+    fi
+   
 fi
