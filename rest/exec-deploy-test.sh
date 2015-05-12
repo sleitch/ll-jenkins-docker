@@ -1,47 +1,5 @@
 #!/bin/bash
 
-############################################################################
-#
-#   Define the execute start exec function for later use.
-#   This will execute the start command against the exec ID
-#
-############################################################################
-
-startExec(){ 
-    #  The data for the command:
-    #
-    data='{"Detach": false, "Tty": false}'
-
-    URL='http://172.24.200.10:4243/exec/'"$CURRENT_EXEC_ID"'/start'
-
-    echo "Exec URL:  " $URL
-    echo "Exec data: " $data
-
-    STARTRES=$( curl -qSfsw '\n%{http_code}'  -H 'Content-Type:application/json' -X POST $URL --data "$data") 2>/dev/null
-    # get exit code of curl
-    STARTRET=$?
-     
-    echo "Result of start exec: " $STARTRES
-      
-    if [[ $STARTRET -ne 0 ]] ; then
-        echo "Curl Error, exit code: $STARTRET"
-        exit $STARTRET
-    else
-        # get the http status code from end of STARTRES 
-        startcode=$(echo "$STARTRES" | tail -n1)
-
-        echo "startcode $startcode"
-	if [[ $startcode -eq 201 ]] ; then
-           echo "No such exec ID: $CURRENT_EXEC_ID"
-        else
-           if [[ $startcode -eq 404 ]] ; then           
-              echo "No such exec ID: $CURRENT_EXEC_ID"
-           fi
-        fi 
-    fi
-}  
-
-
 
 ############################################################################
 #
@@ -63,8 +21,7 @@ createExecID(){
 
     # get exit code of curl
     RET=$?
-    
-    echo "Exec URL:  " $URL
+    echo "Created EXEC command 
     echo "Exec data: " $data
     echo "Out= " $OUT
     #echo "Curl exit code: " $RET
@@ -107,6 +64,45 @@ createExecID(){
     fi
 }  
 
+############################################################################
+#
+#   This will execute the start command against the CURRENT_EXEC_ID 
+#
+############################################################################
+
+startExec(){ 
+    #  The data for the command:
+    #
+    data='{"Detach": false, "Tty": false}'
+
+    URL='http://172.24.200.10:4243/exec/'"$CURRENT_EXEC_ID"'/start'
+
+    echo "Exec URL:  " $URL
+    echo "Exec data: " $data
+
+    STARTRES=$( curl -qSfsw '\n%{http_code}'  -H 'Content-Type:application/json' -X POST $URL --data "$data") 2>/dev/null
+    # get exit code of curl
+    STARTRET=$?
+     
+    echo "Result of start exec: " $STARTRES
+      
+    if [[ $STARTRET -ne 0 ]] ; then
+        echo "Curl Error, exit code: $STARTRET"
+        exit $STARTRET
+    else
+        # get the http status code from end of STARTRES 
+        startcode=$(echo "$STARTRES" | tail -n1)
+
+        echo "startcode $startcode"
+	if [[ $startcode -eq 201 ]] ; then
+           echo "No such exec ID: $CURRENT_EXEC_ID"
+        else
+           if [[ $startcode -eq 404 ]] ; then           
+              echo "No such exec ID: $CURRENT_EXEC_ID"
+           fi
+        fi 
+    fi
+}  
 
 
 #
@@ -141,8 +137,7 @@ else
         startExec
     fi 
 
-
-     if [[ $startcode -ne 201 ]]; then
+    if [[ $startcode -ne 201 ]]; then
         echo "Failed to start exec, exit code: $startcode, Exec ID: $CURRENT_EXEC_ID"
         exit $startcode
     fi
