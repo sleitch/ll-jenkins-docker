@@ -21,7 +21,6 @@ createExecID(){
 
     # get exit code of curl
     RET=$?
-    echo "Created EXEC command 
     echo "Exec data: " $data
     echo "Out= " $OUT
     #echo "Curl exit code: " $RET
